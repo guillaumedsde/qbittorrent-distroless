@@ -3,6 +3,7 @@ ARG VCS_REF
 ARG QBITTORRENT_VERSION=4.3.4.1
 ARG QBITTORRENT_RELEASE=r1
 ARG QBITTORRENT_ARCH=amd64
+ARG BUSYBOX_VERSION=1.31.0-i686-uclibc
 
 FROM alpine:3.13 as build
 
@@ -13,6 +14,11 @@ ARG QBITTORRENT_ARCH
 ADD https://github.com/guillaumedsde/qbittorrent-nox-static/releases/download/$QBITTORRENT_VERSION-$QBITTORRENT_RELEASE/qbittorrent-nox-v$QBITTORRENT_VERSION-static-$QBITTORRENT_ARCH /rootfs/usr/bin/qbittorrent-nox
 
 RUN chmod 755 /rootfs/usr/bin/qbittorrent-nox
+
+ARG BUSYBOX_VERSION
+ADD https://busybox.net/downloads/binaries/$BUSYBOX_VERSION/busybox_WGET /rootfs/usr/bin/wget
+RUN chmod 755 /rootfs/usr/bin/wget
+
 
 FROM gcr.io/distroless/base:nonroot
 
@@ -40,5 +46,8 @@ VOLUME /config
 WORKDIR /config
 
 EXPOSE 8080
+
+HEALTHCHECK  --start-period=1s --interval=5s --timeout=2s --retries=5 \
+    CMD [ "/usr/bin/wget", "--quiet", "--tries=1", "--spider", "http://localhost:8080/"]
 
 ENTRYPOINT [ "/usr/bin/qbittorrent-nox" ]
