@@ -1,7 +1,5 @@
 # [🐋 qBittorrent-distroless](https://github.com/guillaumedsde/qbittorrent-distroless)
 
-[![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/guillaumedsde/qbittorrent-distroless)](https://hub.docker.com/r/guillaumedsde/qbittorrent-distroless/builds)
-[![Gitlab pipeline status](https://img.shields.io/gitlab/pipeline/guillaumedsde/qbittorrent-distroless?label=documentation)](https://guillaumedsde.gitlab.io/qbittorrent-distroless/)
 [![Docker Cloud Automated build](https://img.shields.io/docker/cloud/automated/guillaumedsde/qbittorrent-distroless)](https://hub.docker.com/r/guillaumedsde/qbittorrent-distroless/builds)
 [![Docker Image Version (latest by date)](https://img.shields.io/docker/v/guillaumedsde/qbittorrent-distroless)](https://hub.docker.com/r/guillaumedsde/qbittorrent-distroless/tags)
 [![Docker Image Size (latest by date)](https://img.shields.io/docker/image-size/guillaumedsde/qbittorrent-distroless)](https://hub.docker.com/r/guillaumedsde/qbittorrent-distroless)
