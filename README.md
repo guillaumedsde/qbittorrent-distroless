@@ -65,5 +65,6 @@ Currently this container supports only one (but widely used) platform:
 A couple of projects really helped me out while developing this container:
 
 - 💽 [qBittorrent](https://github.com/qBittorrent/qBittorrent) _the_ awesome software
+- 💽 [userdocs/qbittorrent-nox-static](https://github.com/userdocs/qbittorrent-nox-static) for the great static qbittorrent build scripts
 - 🥑 [Google's distroless](https://github.com/GoogleContainerTools/distroless) base docker images
 - 🐋 The [Docker](https://github.com/docker) project (of course)
