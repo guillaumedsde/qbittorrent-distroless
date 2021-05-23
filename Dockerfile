@@ -53,7 +53,7 @@ WORKDIR /config
 
 EXPOSE 8080
 
-HEALTHCHECK  --start-period=1s --interval=5s --timeout=2s --retries=5 \
-    CMD [ "/usr/bin/wget", "--quiet", "--tries=1", "--spider", "http://localhost:8080/"]
+HEALTHCHECK  --start-period=1s --interval=5s --timeout=4s --retries=5 \
+    CMD [ "/usr/bin/wget", "--quiet", "--timeout=3", "--tries=1", "--spider", "http://127.0.0.1:8080/"]
 
 ENTRYPOINT [ "/usr/bin/qbittorrent-nox" ]
