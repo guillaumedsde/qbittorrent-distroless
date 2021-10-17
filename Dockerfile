@@ -2,7 +2,7 @@ ARG BUILD_DATE
 ARG VCS_REF
 ARG QBITTORRENT_VERSION=4.3.8
 ARG LIBTORRENT_VERSION=v2.0.4
-ARG SHA512_QBITTORRENT_BINARY=3b5915e5212535b822404a0c57845590c22b5f6bf9b4ac003a86bbe8762965e9a81b404d62c8b91c16bf8389d04986fb48d874d9059ad13f9be398fad70aad6b
+ARG SHA512_QBITTORRENT_BINARY=33cf482bc51318ad38a3768234d0279ceaac52822b9de1734e63b7dacf4dd399672d4d3bd280acf6dae041eeeda8133d4db22c35a51bcefe94fa161eedd36df2
 ARG QBITTORRENT_ARCH=x86_64
 ARG BUSYBOX_VERSION=1.31.0-i686-uclibc
 
@@ -17,7 +17,7 @@ ADD https://github.com/userdocs/qbittorrent-nox-static/releases/download/release
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN if [ -n "$SHA512_QBITTORRENT_BINARY" ]; \
-    then echo "$SHA512_QBITTORRENT_BINARY /rootfs/usr/bin/qbittorrent-nox" | sha512sum --check;\
+    then echo "$SHA512_QBITTORRENT_BINARY  /rootfs/usr/bin/qbittorrent-nox" | sha512sum --check;\
     fi \
     && chmod 755 /rootfs/usr/bin/qbittorrent-nox
 
