@@ -21,7 +21,7 @@ build:
       --tag $IMAGE_NAME:latest
       --tag $IMAGE_NAME:$CI_COMMIT_SHORT_SHA
       .
-    - docker push $IMAGE_NAME:latest --all-tags
+    - docker push $IMAGE_NAME:$CI_COMMIT_SHORT_SHA --all-tags
 
 # the 'pages' job will deploy and build your site to the 'public' path
 pages:
