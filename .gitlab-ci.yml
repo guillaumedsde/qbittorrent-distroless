@@ -1,0 +1,52 @@
+stages:
+  - build
+  - docs
+
+build:
+  image: docker:20
+  stage: build
+  variables:
+    DOCKER_BUILDKIT: "1"
+    IMAGE_NAME: guillaumedsde/qbittorrent-distroless
+  services:
+    - docker:20-dind
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD
+  script:
+    - > 
+      docker build
+      --progress plain
+      --target "distroless"
+      --build-arg BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+      --build-arg VCS_REF="$CI_COMMIT_SHORT_SHA"
+      --tag $IMAGE_NAME:latest
+      --tag $IMAGE_NAME:$CI_COMMIT_SHORT_SHA
+      .
+    - docker push $IMAGE_NAME:latest --all-tags
+
+
+# the 'pages' job will deploy and build your site to the 'public' path
+pages:
+  stage: docs
+  # requiring the environment of NodeJS 10
+  image: node:10
+  # add 'node_modules' to cache for speeding up builds
+  cache:
+    paths:
+      - node_modules/ # Node modules and dependencies
+  before_script:
+    - npm install gitbook-cli -g # install gitbook
+    - gitbook fetch 3.2.3 # fetch final stable version
+    - gitbook install # add any requested plugins in book.json
+  script:
+    - gitbook build . public # build to public path
+  artifacts:
+    paths:
+      - public
+    expire_in: 1 week
+  only:
+    refs:
+      - master
+    changes:
+      - README.md
+      - .gitlab-ci.yml
