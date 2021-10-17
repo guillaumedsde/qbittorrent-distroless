@@ -13,17 +13,15 @@ build:
   before_script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD
   script:
-    - > 
+    - >
       docker build
       --progress plain
-      --target "distroless"
       --build-arg BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
       --build-arg VCS_REF="$CI_COMMIT_SHORT_SHA"
       --tag $IMAGE_NAME:latest
       --tag $IMAGE_NAME:$CI_COMMIT_SHORT_SHA
       .
     - docker push $IMAGE_NAME:latest --all-tags
-
 
 # the 'pages' job will deploy and build your site to the 'public' path
 pages:
