@@ -58,4 +58,4 @@ HEALTHCHECK  --start-period=3s --interval=5s --timeout=4s --retries=5 \
 
 ENTRYPOINT [ "/usr/bin/qbittorrent-nox" ]
 
-CMD [ "--profile", "/config" ]
+CMD [ "--profile=/config" ]
