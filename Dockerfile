@@ -12,7 +12,8 @@ ARG BUSYBOX_VERSION
 
 WORKDIR /binaries
 
-RUN wget "https://github.com/userdocs/qbittorrent-nox-static/releases/download/release-${QBITTORRENT_VERSION}_${LIBTORRENT_VERSION}/$(uname -m)-qbittorrent-nox" -O qbittorrent-nox \
+RUN ARCH="$(uname -m | sed 's/armv7l/armv7/')" \
+    && wget "https://github.com/userdocs/qbittorrent-nox-static/releases/download/release-${QBITTORRENT_VERSION}_${LIBTORRENT_VERSION}/${ARCH}-qbittorrent-nox" -O qbittorrent-nox \
     && chmod 755 ./qbittorrent-nox
 
 COPY --chmod=755 --from=busybox:1.36.0-musl /bin/wget wget
