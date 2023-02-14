@@ -6,7 +6,7 @@ ARG SHA512_QBITTORRENT_BINARY=9552e66b35825794be2260f0e28d6e811b5a411b774d7af460
 ARG QBITTORRENT_ARCH=x86_64
 ARG BUSYBOX_VERSION=1.31.0-i686-uclibc
 
-FROM debian:buster-slim as build
+FROM debian:bullseye-slim as build
 
 ARG QBITTORRENT_VERSION
 ARG LIBTORRENT_VERSION
@@ -26,7 +26,7 @@ ADD https://busybox.net/downloads/binaries/${BUSYBOX_VERSION}/busybox_WGET /root
 RUN chmod 755 /rootfs/usr/bin/wget
 
 
-FROM gcr.io/distroless/base:nonroot
+FROM gcr.io/distroless/static:nonroot
 
 # Build-time metadata as defined at http://label-schema.org
 ARG BUILD_DATE
