@@ -54,9 +54,11 @@ services:
 
 ## 🖥️ Supported platforms
 
-Currently this container supports only one (but widely used) platform:
+This docker image is built for the following platforms:
 
 - linux/amd64
+- linux/arm/v7
+- linux/arm64
 
 ## 🙏 Credits
 
