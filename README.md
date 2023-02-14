@@ -1,6 +1,5 @@
 # [🐋 qBittorrent-distroless](https://github.com/guillaumedsde/qbittorrent-distroless)
 
-[![Docker Cloud Automated build](https://img.shields.io/docker/cloud/automated/guillaumedsde/qbittorrent-distroless)](https://hub.docker.com/r/guillaumedsde/qbittorrent-distroless/builds)
 [![Docker Image Version (latest by date)](https://img.shields.io/docker/v/guillaumedsde/qbittorrent-distroless)](https://hub.docker.com/r/guillaumedsde/qbittorrent-distroless/tags)
 [![Docker Image Size (latest by date)](https://img.shields.io/docker/image-size/guillaumedsde/qbittorrent-distroless)](https://hub.docker.com/r/guillaumedsde/qbittorrent-distroless)
 [![Docker Pulls](https://img.shields.io/docker/pulls/guillaumedsde/qbittorrent-distroless)](https://hub.docker.com/r/guillaumedsde/qbittorrent-distroless)
@@ -10,8 +9,7 @@
 [![GitHub](https://img.shields.io/github/license/guillaumedsde/qbittorrent-distroless)](https://github.com/guillaumedsde/qbittorrent-distroless/blob/master/LICENSE.md)
 
 This repository contains the code to build a small and secure **[distroless](https://github.com/GoogleContainerTools/distroless)** **docker** image for **[qBittorrent](https://github.com/qBittorrent/qBittorrent)** running as an unprivileged user.
-The final images are built and hosted on the [dockerhub](https://hub.docker.com/r/guillaumedsde/qbittorrent-distroless) and the documentation is hosted on [gitlab pages](https://guillaumedsde.gitlab.io/qbittorrent-distroless/)
-
+The final images are built and hosted on the [dockerhub](https://hub.docker.com/r/guillaumedsde/qbittorrent-distroless).
 ## ✔️ Features summary
 
 - 🥑 [distroless](https://github.com/GoogleContainerTools/distroless) minimal image
