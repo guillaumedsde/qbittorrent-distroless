@@ -2,48 +2,42 @@ ARG BUILD_DATE
 ARG VCS_REF
 ARG QBITTORRENT_VERSION=4.5.1
 ARG LIBTORRENT_VERSION=v2.0.8
-ARG SHA512_QBITTORRENT_BINARY=9552e66b35825794be2260f0e28d6e811b5a411b774d7af4605f167e86a3c3d929b8adcb08240d277e9c304430f399505a3d5c5e83aae77499d3773bb1e91f22
 ARG QBITTORRENT_ARCH=x86_64
-ARG BUSYBOX_VERSION=1.31.0-i686-uclibc
+ARG BASE_IMAGE=gcr.io/distroless/static-debian11:nonroot
 
-FROM debian:bullseye-slim as build
+FROM alpine:3.17.2 as builder
 
 ARG QBITTORRENT_VERSION
 ARG LIBTORRENT_VERSION
-ARG SHA512_QBITTORRENT_BINARY
-ARG QBITTORRENT_ARCH
-
-ADD https://github.com/userdocs/qbittorrent-nox-static/releases/download/release-${QBITTORRENT_VERSION}_${LIBTORRENT_VERSION}/${QBITTORRENT_ARCH}-qbittorrent-nox /rootfs/usr/bin/qbittorrent-nox
-
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-RUN if [ -n "$SHA512_QBITTORRENT_BINARY" ]; \
-    then echo "$SHA512_QBITTORRENT_BINARY  /rootfs/usr/bin/qbittorrent-nox" | sha512sum --check;\
-    fi \
-    && chmod 755 /rootfs/usr/bin/qbittorrent-nox
-
 ARG BUSYBOX_VERSION
-ADD https://busybox.net/downloads/binaries/${BUSYBOX_VERSION}/busybox_WGET /rootfs/usr/bin/wget
-RUN chmod 755 /rootfs/usr/bin/wget
 
+WORKDIR /binaries
 
-FROM gcr.io/distroless/static:nonroot
+RUN wget "https://github.com/userdocs/qbittorrent-nox-static/releases/download/release-${QBITTORRENT_VERSION}_${LIBTORRENT_VERSION}/$(uname -m)-qbittorrent-nox" -O qbittorrent-nox \
+    && chmod 755 ./qbittorrent-nox
 
-# Build-time metadata as defined at http://label-schema.org
+COPY --chmod=755 --from=busybox:1.36.0-musl /bin/wget wget
+
+FROM $BASE_IMAGE
+
+ARG QBITTORRENT_VERSION
+ARG BASE_IMAGE
+
+# Build-time metadata as defined at https://github.com/opencontainers/image-spec/blob/819aa940cae7c067a8bf89b1745d3255ddaaba1d/annotations.md
 ARG BUILD_DATE
 ARG VCS_REF
-ARG QBITTORRENT_VERSION
 
-LABEL org.label-schema.build-date=$BUILD_DATE \
-    org.label-schema.name="qbittorrent-distroless" \
-    org.label-schema.description="Distroless container for the qBittorrent program" \
-    org.label-schema.url="https://guillaumedsde.gitlab.io/qbittorrent-distroless/" \
-    org.label-schema.vcs-ref=$VCS_REF \
-    org.label-schema.version=$QBITTORRENT_VERSION \
-    org.label-schema.vcs-url="https://github.com/guillaumedsde/qbittorrent-distroless" \
-    org.label-schema.vendor="guillaumedsde" \
-    org.label-schema.schema-version="1.0"
+LABEL org.opencontainers.image.created=$BUILD_DATE \
+    org.opencontainers.image.title="qbittorrent-distroless" \
+    org.opencontainers.image.description="Distroless container for the qBittorrent program" \
+    org.opencontainers.image.revision=$VCS_REF \
+    org.opencontainers.image.base.name=$BASE_IMAGE \
+    org.opencontainers.image.version=$QBITTORRENT_VERSION \
+    org.opencontainers.image.source="https://github.com/guillaumedsde/qbittorrent-distroless" \
+    org.opencontainers.image.authors="guillaumedsde" \
+    org.opencontainers.image.vendor="guillaumedsde"
 
-COPY --from=build /rootfs /
+COPY --from=builder /binaries /usr/bin
 
 ENV HOME=/config
 
