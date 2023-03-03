@@ -3,10 +3,18 @@ on:
     branches:
       - master
 
+env:
+  PLATFORMS: |
+    linux/amd64
+    linux/arm/v7
+    linux/arm64
+
 jobs:
   docker:
     runs-on: ubuntu-22.04
     steps:
+      - uses: actions/checkout@v3
+      - uses: hadolint/hadolint-action@v3.1.0
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
       - name: Set up Docker Buildx
@@ -26,13 +34,27 @@ jobs:
           tags: |
             type=raw,value=latest,enable={{is_default_branch}}
             type=sha
-      - name: Build and push
+      - name: Build
+        id: build
         uses: docker/build-push-action@v4
         with:
-          push: ${{ github.event_name != 'pull_request' }}
+          load: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          platforms: |
-            linux/amd64
-            linux/arm/v7
-            linux/arm64
+          platforms: ${{ env.PLATFORMS }}
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@0.9.1
+        with:
+          image-ref: ${{ steps.build.outputs.imageid }}
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+      # Push image to docker registries (rebuilds images using cache from previous steps)
+      - name: Push
+        if: github.event_name != 'pull_request'
+        uses: docker/build-push-action@v4
+        with:
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          platforms: ${{ env.PLATFORMS }}
