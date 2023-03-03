@@ -1,3 +1,6 @@
+on:
+  push:
+
 jobs:
   docker:
     runs-on: ubuntu-22.04
@@ -23,7 +26,7 @@ jobs:
           tags: |
             type=raw,value=latest,enable={{is_default_branch}}
             type=sha
-      - name: Build
+      - name: Build for test
         id: build
         uses: docker/build-push-action@v4
         with:
@@ -37,7 +40,7 @@ jobs:
           exit-code: '1'
           ignore-unfixed: true
       # Push image to docker registries (rebuilds images using cache from previous steps)
-      - name: Push
+      - name: Build and Push
         if: github.event_name != 'pull_request'
         uses: docker/build-push-action@v4
         with:
