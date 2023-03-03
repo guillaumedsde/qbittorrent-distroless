@@ -1,14 +1,3 @@
-on:
-  push:
-    branches:
-      - master
-
-env:
-  PLATFORMS: |
-    linux/amd64
-    linux/arm/v7
-    linux/arm64
-
 jobs:
   docker:
     runs-on: ubuntu-22.04
@@ -39,9 +28,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           load: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          platforms: ${{ env.PLATFORMS }}
+          tags: ${{ github.repository }}:test
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@0.9.1
         with:
@@ -57,4 +44,7 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          platforms: ${{ env.PLATFORMS }}
+          platforms: |
+            linux/amd64
+            linux/arm/v7
+            linux/arm64
