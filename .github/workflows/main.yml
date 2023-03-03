@@ -5,27 +5,33 @@ on:
 
 jobs:
   docker:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
       - name: Login to Docker Hub
+        if: github.event_name != 'pull_request'
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: |
+            docker.io/${{ github.repository }}
+          tags: |
+            type=raw,value=latest,enable={{is_default_branch}}
+            type=sha
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
-          push: true
-          build-args: |
-            BUILD_DATE=${{ github.event.repository.updated_at}}
-            VCS_REF=${{ github.head_ref }}
-          tags: |
-            docker.io/guillaumedsde/qbittorrent-distroless:${{ github.sha }}
-            docker.io/guillaumedsde/qbittorrent-distroless:latest
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
           platforms: |
             linux/amd64
             linux/arm/v7
