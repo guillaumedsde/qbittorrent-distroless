@@ -4,7 +4,6 @@ on:
       software-version:
         required: false
         type: string
-        default
       platforms:
         required: false
         type: string
