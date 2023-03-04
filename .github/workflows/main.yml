@@ -1,5 +1,10 @@
 on:
   push:
+  workflow_call:
+    inputs:
+      software-version:
+        required: false
+        type: string
 
 jobs:
   docker:
@@ -34,6 +39,7 @@ jobs:
           tags: |
             type=raw,value=latest,enable={{is_default_branch}}
             type=sha
+            type=raw,value=${{ inputs.software-version }},enable=${{ inputs.software-version != ''}}
       - name: Build for test
         id: build
         uses: docker/build-push-action@v4
@@ -55,6 +61,8 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            VERSION=${{ inputs.software-version || '' }}
           platforms: |
             linux/amd64
             linux/arm/v7
