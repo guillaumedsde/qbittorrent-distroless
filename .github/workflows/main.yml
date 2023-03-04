@@ -5,6 +5,13 @@ on:
       software-version:
         required: false
         type: string
+    secrets:
+      DOCKERHUB_USERNAME:
+        required: false
+      DOCKERHUB_TOKEN:
+        required: false
+      GITHUB_TOKEN:
+        required: false
 
 jobs:
   docker:
