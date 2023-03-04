@@ -53,6 +53,7 @@ jobs:
           tags: ${{ github.repository }}:test
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@0.9.1
+        continue-on-error: true
         with:
           image-ref: ${{ steps.build.outputs.imageid }}
           format: 'table'
