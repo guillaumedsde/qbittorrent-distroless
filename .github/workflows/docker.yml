@@ -4,6 +4,7 @@ on:
       software-version:
         required: false
         type: string
+        default
       platforms:
         required: false
         type: string
@@ -54,6 +55,8 @@ jobs:
         with:
           load: true
           tags: ${{ github.repository }}:test
+          build-args: |
+            VERSION=${{ inputs.software-version || github.sha }}
       # TODO: use with github code scanning
       #       https://github.com/aquasecurity/trivy-action#using-trivy-with-github-code-scanning
       - name: Run Trivy vulnerability scanner
@@ -73,7 +76,7 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
-            VERSION=${{ inputs.software-version || '' }}
+            VERSION=${{ inputs.software-version || github.sha }}
           platforms: |
             linux/amd64
             linux/arm/v7
