@@ -51,6 +51,8 @@ jobs:
         with:
           load: true
           tags: ${{ github.repository }}:test
+      # TODO: use with github code scanning
+      #       https://github.com/aquasecurity/trivy-action#using-trivy-with-github-code-scanning
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@0.9.1
         continue-on-error: true
