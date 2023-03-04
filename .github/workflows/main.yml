@@ -59,3 +59,10 @@ jobs:
             linux/amd64
             linux/arm/v7
             linux/arm64
+      - name: Docker Hub Description
+        if: github.ref == '${{ github.event.repository.default_branch }}'
+        uses: peter-evans/dockerhub-description@bbef094b307cb3c9cd590b1ead22933e72575935
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          repository: ${{ github.repository }}
