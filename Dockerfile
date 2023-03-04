@@ -1,7 +1,7 @@
 ARG QBITTORRENT_VERSION=4.5.2
 ARG LIBTORRENT_VERSION=v2.0.8
 
-FROM alpine:3.17 as builder
+FROM docker.io/alpine:3.17 as builder
 
 ARG QBITTORRENT_VERSION
 ARG LIBTORRENT_VERSION
@@ -13,7 +13,7 @@ RUN ARCH="$(uname -m | sed 's/armv7l/armv7/')" \
     && wget -q "https://github.com/userdocs/qbittorrent-nox-static/releases/download/release-${QBITTORRENT_VERSION}_${LIBTORRENT_VERSION}/${ARCH}-qbittorrent-nox" -O qbittorrent-nox \
     && chmod 755 ./qbittorrent-nox
 
-COPY --chmod=755 --from=busybox:1-musl /bin/wget wget
+COPY --chmod=755 --from=busybox:1.36.0-musl /bin/wget wget
 
 FROM gcr.io/distroless/static-debian11:nonroot
 
