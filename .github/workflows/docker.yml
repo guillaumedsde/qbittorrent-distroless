@@ -76,10 +76,7 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
             VERSION=${{ inputs.software-version || github.sha }}
-          platforms: |
-            linux/amd64
-            linux/arm/v7
-            linux/arm64
+          platforms: ${{ inputs.platforms }}
       - name: Docker Hub Description
         if: github.ref == '${{ github.event.repository.default_branch }}'
         uses: peter-evans/dockerhub-description@bbef094b307cb3c9cd590b1ead22933e72575935
