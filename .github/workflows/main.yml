@@ -1,84 +1,12 @@
 on:
   push:
-  workflow_call:
-    inputs:
-      software-version:
-        required: false
-        type: string
-    secrets:
-      DOCKERHUB_USERNAME:
-        required: false
-      DOCKERHUB_TOKEN:
-        required: false
 
 jobs:
   docker:
-    runs-on: ubuntu-22.04
-    steps:
-      - uses: actions/checkout@v3
-      - uses: hadolint/hadolint-action@v3.1.0
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-      - name: Login to Docker Hub
-        if: github.ref == '${{ github.event.repository.default_branch }}'
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Login to GitHub Container Registry
-        if: github.ref == '${{ github.event.repository.default_branch }}'
-        uses: docker/login-action@v2
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Docker meta
-        id: meta
-        uses: docker/metadata-action@v4
-        with:
-          images: |
-            docker.io/${{ github.repository }}
-            ghcr.io/${{ github.repository }}
-          tags: |
-            type=raw,value=latest,enable={{is_default_branch}}
-            type=sha
-            type=raw,value=${{ inputs.software-version }},enable=${{ inputs.software-version != ''}}
-      - name: Build for test
-        id: build
-        uses: docker/build-push-action@v4
-        with:
-          load: true
-          tags: ${{ github.repository }}:test
-      # TODO: use with github code scanning
-      #       https://github.com/aquasecurity/trivy-action#using-trivy-with-github-code-scanning
-      - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@0.9.1
-        continue-on-error: true
-        with:
-          image-ref: ${{ steps.build.outputs.imageid }}
-          format: 'table'
-          exit-code: '1'
-          ignore-unfixed: true
-      # Push image to docker registries (rebuilds images using cache from previous steps)
-      - name: Build and Push
-        if: github.ref == '${{ github.event.repository.default_branch }}'
-        uses: docker/build-push-action@v4
-        with:
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          build-args: |
-            VERSION=${{ inputs.software-version || '' }}
-          platforms: |
-            linux/amd64
-            linux/arm/v7
-            linux/arm64
-      - name: Docker Hub Description
-        if: github.ref == '${{ github.event.repository.default_branch }}'
-        uses: peter-evans/dockerhub-description@bbef094b307cb3c9cd590b1ead22933e72575935
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-          repository: ${{ github.repository }}
+    uses: ./.github/workflows/docker.yml
+    with:
+      platforms:  |
+        linux/amd64
+        linux/arm/v7
+        linux/arm64
+    secrets: inherit
