@@ -8,6 +8,10 @@ on:
         required: false
         type: string
         default: linux/amd64
+      image-name:
+        required: false
+        type: string
+        default: ${{ github.repository }}
     secrets:
       DOCKERHUB_USERNAME:
         required: false
@@ -42,8 +46,8 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: |
-            docker.io/${{ github.repository }}
-            ghcr.io/${{ github.repository }}
+            docker.io/${{ inputs.image-name }}
+            ghcr.io/${{ inputs.image-name }}
           tags: |
             type=raw,value=${{ inputs.software-version }},enable=${{ inputs.software-version != ''}}
             type=raw,value=latest,enable={{is_default_branch}}
@@ -53,7 +57,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           load: true
-          tags: ${{ github.repository }}:test
+          tags: ${{ inputs.image-name }}:test
           build-args: |
             VERSION=${{ inputs.software-version || github.sha }}
           cache-from: type=gha
@@ -87,4 +91,4 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-          repository: ${{ github.repository }}
+          repository: ${{ inputs.image-name }}
