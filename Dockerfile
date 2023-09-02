@@ -1,4 +1,4 @@
-ARG QBITTORRENT_VERSION=4.5.4
+ARG QBITTORRENT_VERSION=4.5.5
 ARG LIBTORRENT_VERSION=v2.0.9
 
 FROM docker.io/alpine:3.18 as builder
@@ -15,7 +15,7 @@ RUN ARCH="$(uname -m | sed 's/armv7l/armv7/')" \
 
 COPY --chmod=755 --from=busybox:1.36.1-musl /bin/wget wget
 
-FROM gcr.io/distroless/static-debian11:nonroot
+FROM gcr.io/distroless/static-debian12:nonroot
 
 COPY --from=builder /binaries /usr/bin
 
