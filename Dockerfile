@@ -1,5 +1,5 @@
-ARG QBITTORRENT_VERSION=4.5.5
-ARG LIBTORRENT_VERSION=v2.0.9
+ARG QBITTORRENT_VERSION=4.6.0
+ARG LIBTORRENT_VERSION=2.0.9
 
 FROM docker.io/alpine:3.18 as builder
 
@@ -10,7 +10,7 @@ WORKDIR /binaries
 
 SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 RUN ARCH="$(uname -m | sed 's/armv7l/armv7/')" \
-    && wget -q "https://github.com/userdocs/qbittorrent-nox-static/releases/download/release-${QBITTORRENT_VERSION}_${LIBTORRENT_VERSION}/${ARCH}-qbittorrent-nox" -O qbittorrent-nox \
+    && wget -q "https://github.com/userdocs/qbittorrent-nox-static/releases/download/release-${QBITTORRENT_VERSION}_v${LIBTORRENT_VERSION}/${ARCH}-qbittorrent-nox" -O qbittorrent-nox \
     && chmod 755 ./qbittorrent-nox
 
 COPY --chmod=755 --from=busybox:1.36.1-musl /bin/wget wget
