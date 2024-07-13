@@ -65,7 +65,7 @@ jobs:
       # TODO: use with github code scanning
       #       https://github.com/aquasecurity/trivy-action#using-trivy-with-github-code-scanning
       - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@0.23.0
+        uses: aquasecurity/trivy-action@0.24.0
         continue-on-error: true
         with:
           image-ref: ${{ steps.build.outputs.imageid }}
