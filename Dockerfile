@@ -13,7 +13,7 @@ RUN ARCH="$(uname -m | sed 's/armv7l/armv7/')" \
     && wget -q "https://github.com/userdocs/qbittorrent-nox-static/releases/download/release-${QBITTORRENT_VERSION}_v${LIBTORRENT_VERSION}/${ARCH}-qbittorrent-nox" -O qbittorrent-nox \
     && chmod 755 ./qbittorrent-nox
 
-COPY --chmod=755 --from=busybox:1.36.1-musl /bin/wget wget
+COPY --chmod=755 --from=busybox:1.37.0-musl /bin/wget wget
 
 FROM gcr.io/distroless/static-debian12:nonroot
 
