@@ -87,7 +87,7 @@ jobs:
           cache-to: type=gha,mode=max
       - name: Docker Hub Description
         if: github.ref == '${{ github.event.repository.default_branch }}'
-        uses: peter-evans/dockerhub-description@ede0e66c26c29b05c9e12e1d999564171a061c65
+        uses: peter-evans/dockerhub-description@8810bfe82103e97f82a76c0de025b12f906d5047
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
