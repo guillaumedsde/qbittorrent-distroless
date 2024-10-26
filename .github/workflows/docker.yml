@@ -54,7 +54,7 @@ jobs:
             type=sha
       - name: Build for test
         id: build
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           load: true
           tags: ${{ inputs.image-name }}:test
@@ -75,7 +75,7 @@ jobs:
       # Push image to docker registries (rebuilds images using cache from previous steps)
       - name: Build and Push
         if: github.ref == '${{ github.event.repository.default_branch }}'
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
