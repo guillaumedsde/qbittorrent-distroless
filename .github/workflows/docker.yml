@@ -12,6 +12,10 @@ on:
         required: false
         type: string
         default: ${{ github.repository }}
+      extra-build-args:
+        type: string
+        required: false
+        default: ""
     secrets:
       DOCKERHUB_USERNAME:
         required: false
@@ -60,6 +64,7 @@ jobs:
           tags: ${{ inputs.image-name }}:test
           build-args: |
             VERSION=${{ inputs.software-version || github.sha }}
+            ${{ inputs.extra-build-args }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
       # TODO: use with github code scanning
@@ -82,6 +87,7 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
             VERSION=${{ inputs.software-version || github.sha }}
+            ${{ inputs.extra-build-args }}
           platforms: ${{ inputs.platforms }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
